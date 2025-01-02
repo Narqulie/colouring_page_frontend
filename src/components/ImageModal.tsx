@@ -7,12 +7,17 @@ interface ImageModalProps {
   onReroll?: (prompt: string) => void
 }
 
-export function ImageModal({ image, onClose, onDelete, onReroll }: ImageModalProps) {
+export function ImageModal({
+  image,
+  onClose,
+  onDelete,
+  onReroll,
+}: ImageModalProps) {
   if (!image) return null
 
-  console.log('ImageModal props:', { 
-    hasOnReroll: !!onReroll, 
-    prompt: image.prompt 
+  console.log('ImageModal props:', {
+    hasOnReroll: !!onReroll,
+    prompt: image.prompt,
   })
 
   const handleSave = () => {
@@ -23,25 +28,24 @@ export function ImageModal({ image, onClose, onDelete, onReroll }: ImageModalPro
         .toLowerCase()
         .slice(0, 50)
       const fileName = `${sanitizedPrompt}.png`
-      
-      const fullUrl = image.url.startsWith('http') 
-        ? image.url 
+
+      const fullUrl = image.url.startsWith('http')
+        ? image.url
         : `http://localhost:8000${image.url}`
 
       const link = document.createElement('a')
       link.href = fullUrl
       link.download = fileName
       link.style.display = 'none'
-      
+
       // Add to document, click, and remove
       document.body.appendChild(link)
       link.click()
-      
+
       // Clean up
       setTimeout(() => {
         document.body.removeChild(link)
       }, 100)
-
     } catch (error) {
       console.error('Error downloading image:', error)
     }
@@ -75,6 +79,7 @@ export function ImageModal({ image, onClose, onDelete, onReroll }: ImageModalPro
               body { 
                 margin: 0; 
                 padding: 0; 
+                position: relative;
               }
               img { 
                 max-width: 100%; 
@@ -82,11 +87,20 @@ export function ImageModal({ image, onClose, onDelete, onReroll }: ImageModalPro
                 display: block; 
                 margin: 0 auto;
               }
+              .watermark {
+                position: fixed;
+                bottom: 10px;
+                right: 10px;
+                font-size: 12px;
+                color: #999;
+                opacity: 0.7;
+              }
             }
           </style>
         </head>
         <body>
           <img src="${image.url}" alt="${image.prompt}" />
+          <div class="watermark">${image.prompt} - ColouringPageGenerator</div>
           <script>
             window.onload = function() {
               setTimeout(() => {
@@ -118,7 +132,7 @@ export function ImageModal({ image, onClose, onDelete, onReroll }: ImageModalPro
 
   const handleDelete = async () => {
     if (!image || !onDelete) return
-    
+
     // Show confirmation dialog
     if (window.confirm('Are you sure you want to delete this image?')) {
       try {
@@ -131,16 +145,16 @@ export function ImageModal({ image, onClose, onDelete, onReroll }: ImageModalPro
   }
 
   return (
-    <div 
-      className="modal-overlay" 
+    <div
+      className="modal-overlay"
       onClick={onClose}
       role="dialog"
       aria-modal="true"
       aria-labelledby="modal-title"
     >
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-        <button 
-          className="modal-close" 
+        <button
+          className="modal-close"
           onClick={onClose}
           aria-label="Close modal"
         >
@@ -161,7 +175,7 @@ export function ImageModal({ image, onClose, onDelete, onReroll }: ImageModalPro
               onClick={handlePrint}
               type="button"
             >
-              Print Image
+              Print
             </button>
             {onReroll && (
               <button
@@ -169,16 +183,16 @@ export function ImageModal({ image, onClose, onDelete, onReroll }: ImageModalPro
                 onClick={handleReroll}
                 type="button"
               >
-                Re-roll Image
+                Reuse prompt
               </button>
             )}
             {onDelete && (
-              <button 
-                className="modal-button modal-button-delete" 
-                onClick={handleDelete} 
+              <button
+                className="modal-button modal-button-delete"
+                onClick={handleDelete}
                 type="button"
               >
-                Delete Image
+                Delete
               </button>
             )}
           </div>
