@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react' // Allows us to use state in our com
 import { PromptForm } from './components/promptForm' // Import our custom form component
 import { ImageGallery } from './components/imageGallery' // Import our custom image gallery component
 import './App.css' // Import styles for this component
+import { Footer } from './components/Footer'
 
 // Define TypeScript interfaces for our data structures
 interface Image {
@@ -112,7 +113,7 @@ export default function App() {
     // Main container with 'app' class for styling
     <div className="app">
       {/* Page title */}
-      <h1 className="page-header">AI Colouring Page Generator</h1>
+      <h1 className="page-header">Colouring Page Generator</h1>
       
       {/* Custom form component that takes our handler and loading state */}
       <PromptForm 
@@ -148,6 +149,8 @@ export default function App() {
         onReroll={handleReroll}
         isLoading={isLoading}
       />
+      
+      <Footer />
     </div>
   )
 }

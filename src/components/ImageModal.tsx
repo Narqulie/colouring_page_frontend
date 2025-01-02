@@ -17,13 +17,17 @@ export function ImageModal({ image, onClose, onDelete, onReroll }: ImageModalPro
 
   const handleSave = () => {
     try {
-      // Get the filename and ensure full URL
-      const fileName = image.filename || 'image.png'
+      // Use prompt as filename, sanitize it and limit length
+      const sanitizedPrompt = image.prompt
+        .replace(/[^a-z0-9]/gi, '_')
+        .toLowerCase()
+        .slice(0, 50)
+      const fileName = `${sanitizedPrompt}.png`
+      
       const fullUrl = image.url.startsWith('http') 
         ? image.url 
         : `http://localhost:8000${image.url}`
 
-      // Create a simple anchor element
       const link = document.createElement('a')
       link.href = fullUrl
       link.download = fileName
@@ -68,30 +72,22 @@ export function ImageModal({ image, onClose, onDelete, onReroll }: ImageModalPro
         <head>
           <style>
             @media print {
-              body { margin: 0; padding: 20px; }
+              body { 
+                margin: 0; 
+                padding: 0; 
+              }
               img { 
                 max-width: 100%; 
                 height: auto; 
                 display: block; 
                 margin: 0 auto;
               }
-              .print-details { 
-                margin-top: 20px; 
-                font-family: Arial, sans-serif; 
-                text-align: left;
-              }
             }
           </style>
         </head>
         <body>
           <img src="${image.url}" alt="${image.prompt}" />
-          <div class="print-details">
-            ${image.filename ? `<p>Filename: ${image.filename}</p>` : ''}
-            ${image.timestamp ? `<p>Date: ${image.timestamp}</p>` : ''}
-            <p>Prompt: ${image.prompt}</p>
-          </div>
           <script>
-            // Wait for all content to load
             window.onload = function() {
               setTimeout(() => {
                 window.print();
@@ -152,7 +148,6 @@ export function ImageModal({ image, onClose, onDelete, onReroll }: ImageModalPro
         </button>
         <img src={image.url} alt={image.prompt} className="modal-image" />
         <div className="modal-details">
-          {image.filename && <p className="modal-filename">{image.filename}</p>}
           {image.timestamp && (
             <p className="modal-timestamp">{image.timestamp}</p>
           )}
