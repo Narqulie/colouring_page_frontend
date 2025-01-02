@@ -1,18 +1,13 @@
-interface ImageItem {
-  filename?: string
-  url: string
-  prompt?: string
-  timestamp?: string
-}
+import { ImageItem } from './imageGallery'
 
 interface ImageModalProps {
   image: ImageItem | null
   onClose: () => void
+  onDelete?: (image: ImageItem) => void
   onReroll?: (prompt: string) => void
-  onDelete?: (image: ImageItem) => Promise<void>
 }
 
-export const ImageModal = ({ image, onClose, onReroll, onDelete }: ImageModalProps) => {
+export function ImageModal({ image, onClose, onDelete, onReroll }: ImageModalProps) {
   if (!image) return null
 
   console.log('ImageModal props:', { 

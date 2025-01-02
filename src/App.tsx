@@ -13,16 +13,12 @@ interface Image {
 }
 
 // Main App component - the root component of our application
-function App() {
+export default function App() {
   // State declarations using React's useState hook
   // Each useState creates a variable and a function to update it
   
   // Track loading state (true when processing, false when idle)
   const [isLoading, setIsLoading] = useState(false)
-  
-  // Store the generated image URL/data
-  // null when no image exists, string when we have an image
-  const [image, setImage] = useState<string | null>(null)
   
   // Store any error messages
   // null when no errors, string when we have an error message
@@ -30,9 +26,6 @@ function App() {
   
   // Update image state to handle multiple images
   const [images, setImages] = useState<Image[]>([])
-  
-  // Add state for the currently selected/generated image
-  const [currentImage, setCurrentImage] = useState<string | null>(null)
   
   // Add prompt state
   const [prompt, setPrompt] = useState('')
@@ -76,10 +69,9 @@ function App() {
         throw new Error('Failed to generate image')
       }
 
-      const data = await response.json()
-      setCurrentImage(data.url)
-      await fetchImages()
-      setPrompt('')  // Clear the prompt after successful generation
+      await response.json()  // Just consume the response without storing it
+      await fetchImages()    // Fetch fresh images
+      setPrompt('')         // Clear the prompt
       
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred';
@@ -112,7 +104,6 @@ function App() {
     }
   }
 
-  // The JSX that gets rendered to the page
   return (
     // Main container with 'app' class for styling
     <div className="app">
@@ -122,7 +113,6 @@ function App() {
       {/* Custom form component that takes our handler and loading state */}
       <PromptForm 
         onSubmit={handlePromptSubmit} 
-        isLoading={isLoading}
         prompt={prompt}
         setPrompt={setPrompt}
       />
@@ -148,17 +138,11 @@ function App() {
             hour12: true
           })
         }))} 
-        onImageSelect={(image) => setCurrentImage(image.url)}
-        onRerollPrompt={(prompt) => {
-          setPrompt(prompt)
-        }}
         onDelete={async (image) => {
           await handleDelete(image as Image)
         }}
+        isLoading={isLoading}
       />
     </div>
   )
 }
-
-// Export the App component so it can be imported elsewhere
-export default App

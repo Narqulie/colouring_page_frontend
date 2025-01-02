@@ -3,12 +3,11 @@ import ReactiveButton from 'reactive-button'
 
 interface PromptFormProps {
   onSubmit: (prompt: string) => Promise<void>
-  isLoading: boolean
   prompt: string
   setPrompt: (prompt: string) => void
 }
 
-export const PromptForm = ({ onSubmit, isLoading, prompt, setPrompt }: PromptFormProps) => {
+export const PromptForm = ({ onSubmit, prompt, setPrompt }: PromptFormProps) => {
   const [buttonState, setButtonState] = useState('idle')
 
   const handleSubmit = async (e: React.FormEvent) => {
