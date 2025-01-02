@@ -1,23 +1,23 @@
 import { useState } from 'react'
 import { ImageModal } from './ImageModal'
 
-interface ImageItem {
-  id: string
-  url: string
-  prompt: string
-  filename?: string
-  timestamp?: string
-  date: string
+export interface ImageItem {
+  id: string;
+  url: string;
+  prompt: string;
+  filename: string;
+  timestamp: string;
+  date: string;
 }
 
 interface ImageGalleryProps {
   images: ImageItem[]
   onImageSelect?: (image: ImageItem) => void
-  onReroll?: (prompt: string) => Promise<void>
+  onRerollPrompt?: (prompt: string) => void
   onDelete?: (image: ImageItem & { date: string }) => Promise<void>
 }
 
-export const ImageGallery = ({ images, onImageSelect, onReroll, onDelete }: ImageGalleryProps) => {
+export const ImageGallery = ({ images, onImageSelect, onRerollPrompt, onDelete }: ImageGalleryProps) => {
   const [selectedImage, setSelectedImage] = useState<ImageItem | null>(null)
 
   // Sort images by timestamp (newest first)
@@ -61,8 +61,8 @@ export const ImageGallery = ({ images, onImageSelect, onReroll, onDelete }: Imag
       <ImageModal 
         image={selectedImage} 
         onClose={() => setSelectedImage(null)}
-        onReroll={onReroll ? (prompt: string) => onReroll(prompt) : undefined}
-        onDelete={onDelete ? (image: ImageItem & { id: string }) => onDelete(image) : undefined}
+        onReroll={onRerollPrompt ? (prompt: string) => onRerollPrompt(prompt) : undefined}
+        onDelete={onDelete ? (image: ImageItem & { date: string }) => onDelete(image) : undefined}
       />
     </>
   )

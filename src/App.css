@@ -2,17 +2,57 @@
    0. TYPOGRAPHY
    ====================== */
 :root {
-  --font-primary: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+  --font-primary: futura, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
     Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   --font-size-small: 0.8rem;
   --font-size-base: 1rem;
   --font-size-large: 1.2rem;
+  
+  /* Time-based gradient variables */
+  --gradient-primary: 255, 179, 64;    /* Default warm orange */
+  --gradient-secondary: 195, 226, 204;  /* Default soft green */
+  --gradient-opacity: 1;
+  --background-opacity: 0.5;
 }
 
 body {
   font-family: var(--font-primary);
   font-size: var(--font-size-base);
   line-height: 1.5;
+  background: linear-gradient(
+    135deg, 
+    rgba(var(--gradient-primary), var(--gradient-opacity)) 0%, 
+    rgba(var(--gradient-secondary), var(--gradient-opacity)) 70%
+  );
+}
+
+/* ======================
+   0.5 HEADERS
+   ====================== */
+.page-header {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #efefef;
+  margin: 1rem 0 2rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.349);
+  position: relative;
+  display: inline-block;
+}
+
+.page-header::after {
+  content: '';
+  position: absolute;
+  bottom: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  height: 10px;
+  background: linear-gradient(
+    90deg, 
+    rgba(var(--gradient-primary), 0.6) 0%, 
+    rgba(var(--gradient-secondary), 0.6) 100%
+  );
+  border-radius: 12px;
 }
 
 /* ======================
@@ -27,7 +67,7 @@ html {
 }
 
 body {
-  background: linear-gradient(135deg, #ffb340 0%, #c3e2cc 80%);
+  background: linear-gradient(135deg, #ffb340 0%, #c3e2cc 70%);
 }
 
 /* ======================
@@ -59,7 +99,11 @@ body {
   margin: 2rem auto;
   padding: 2rem;
   text-align: center;
-  background: linear-gradient(135deg, #ffffff50 0%, #ffffff25 100%);
+  background: linear-gradient(
+    135deg, 
+    rgba(var(--gradient-primary), var(--gradient-opacity)) 0%, 
+    rgba(var(--gradient-secondary), var(--gradient-opacity)) 70%
+  );
   color: #000000;
   border-radius: 12px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -92,7 +136,12 @@ body {
 .prompt-form .reactive-btn {
   font-family: inherit;
   font-size: 1rem;
-  background-color: #38bb3c !important;
+  background: linear-gradient(
+    90deg, 
+    rgba(var(--gradient-primary), 0.6) 0%, 
+    rgba(var(--gradient-secondary), 0.6) 100%
+  );
+  opacity: 0.6;
   color: rgb(0, 0, 0) !important;
   border: none;
   border-radius: 12px;
@@ -103,15 +152,19 @@ body {
 }
 
 .prompt-form .reactive-btn:hover:not(:disabled) {
-  background-color: #2da030 !important;
+  background: linear-gradient(
+    90deg, 
+    rgba(var(--gradient-primary), 0.8) 0%, 
+    rgba(var(--gradient-secondary), 0.8) 100%
+  ) !important;
   transform: translateY(-1px);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .prompt-form .reactive-btn:disabled {
-  background-color: #cccccc6b !important;
+  background: #cccccc !important;
   cursor: not-allowed;
-  opacity: 0.7;
+  opacity: 0.33;
 }
 
 .prompt-form .reactive-btn-wrapper {

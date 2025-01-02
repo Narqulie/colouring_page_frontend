@@ -8,7 +8,7 @@ interface ImageItem {
 interface ImageModalProps {
   image: ImageItem | null
   onClose: () => void
-  onReroll?: (prompt: string) => Promise<void>
+  onReroll?: (prompt: string) => void
   onDelete?: (image: ImageItem) => Promise<void>
 }
 
@@ -119,14 +119,10 @@ export const ImageModal = ({ image, onClose, onReroll, onDelete }: ImageModalPro
     }
   }
 
-  const handleReroll = async () => {
+  const handleReroll = () => {
     if (!image?.prompt || !onReroll) return
-    try {
-      onClose() // Close the modal first
-      await onReroll(image.prompt)
-    } catch (error) {
-      console.error('Error rerolling image:', error)
-    }
+    onReroll(image.prompt)
+    onClose()
   }
 
   const handleDelete = async () => {
@@ -144,9 +140,19 @@ export const ImageModal = ({ image, onClose, onReroll, onDelete }: ImageModalPro
   }
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
+    <div 
+      className="modal-overlay" 
+      onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modal-title"
+    >
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-        <button className="modal-close" onClick={onClose}>
+        <button 
+          className="modal-close" 
+          onClick={onClose}
+          aria-label="Close modal"
+        >
           ×
         </button>
         <img src={image.url} alt={image.prompt} className="modal-image" />

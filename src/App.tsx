@@ -33,6 +33,9 @@ function App() {
   
   // Add state for the currently selected/generated image
   const [currentImage, setCurrentImage] = useState<string | null>(null)
+  
+  // Add prompt state
+  const [prompt, setPrompt] = useState('')
 
   // Fetch images when component mounts
   useEffect(() => {
@@ -42,7 +45,8 @@ function App() {
   // Function to fetch images from the API
   const fetchImages = async () => {
     try {
-      const response = await fetch('http://localhost:8000/api/images')
+      const API_URL = import.meta.env.VITE_API_URL;
+      const response = await fetch(`${API_URL}/api/images`)
       const data = await response.json()
       setImages(data.images)
     } catch (err) {
@@ -60,29 +64,30 @@ function App() {
       const formData = new FormData()
       formData.append('prompt', prompt)
 
-      const response = await fetch('http://localhost:8000/api/generate', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/generate`, {
         method: 'POST',
         body: formData,
       })
 
       if (!response.ok) {
+        if (response.status === 429) {
+          throw new Error('Too many requests. Please wait a moment.')
+        }
         throw new Error('Failed to generate image')
       }
 
       const data = await response.json()
       setCurrentImage(data.url)
       await fetchImages()
+      setPrompt('')  // Clear the prompt after successful generation
       
     } catch (err) {
-      setError('Failed generating the image. Please try again.')
-      console.error('Error generating image:', err)
+      const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred';
+      setError(errorMessage);
+      console.error('Error generating image:', err);
       
-      // Automatically clear error after 10 seconds
-      setTimeout(() => {
-        setError(null)
-      }, 10000)
-      
-      throw err
+      setTimeout(() => setError(null), 10000);
+      throw err;
     } finally {
       setIsLoading(false)
     }
@@ -90,7 +95,7 @@ function App() {
 
   const handleDelete = async (image: Image) => {
     try {
-      const response = await fetch(`http://localhost:8000/api/images/${image.filename}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/images/${image.filename}`, {
         method: 'DELETE',
       })
       
@@ -98,7 +103,6 @@ function App() {
         throw new Error('Failed to delete image')
       }
       
-      // Refresh the images list after successful deletion
       await fetchImages()
       
     } catch (err) {
@@ -113,10 +117,15 @@ function App() {
     // Main container with 'app' class for styling
     <div className="app">
       {/* Page title */}
-      <h1>AI Coloring Page Generator</h1>
+      <h1 className="page-header">AI Colouring Page Generator</h1>
       
       {/* Custom form component that takes our handler and loading state */}
-      <PromptForm onSubmit={handlePromptSubmit} isLoading={isLoading} />
+      <PromptForm 
+        onSubmit={handlePromptSubmit} 
+        isLoading={isLoading}
+        prompt={prompt}
+        setPrompt={setPrompt}
+      />
       
       {/* Conditional rendering: Only show error div if there's an error */}
       {error && <div className="error-message">{error}</div>}
@@ -126,9 +135,10 @@ function App() {
       <ImageGallery 
         images={images.map(img => ({
           id: img.filename,
-          url: `http://localhost:8000${img.url}`,
+          url: `${import.meta.env.VITE_API_URL}${img.url}`,
           prompt: img.prompt || '',
           filename: img.filename,
+          date: img.date,
           timestamp: new Date(img.date).toLocaleString('en-GB', {
             day: '2-digit',
             month: '2-digit', 
@@ -139,8 +149,12 @@ function App() {
           })
         }))} 
         onImageSelect={(image) => setCurrentImage(image.url)}
-        onReroll={handlePromptSubmit}
-        onDelete={handleDelete}
+        onRerollPrompt={(prompt) => {
+          setPrompt(prompt)
+        }}
+        onDelete={async (image) => {
+          await handleDelete(image as Image)
+        }}
       />
     </div>
   )
