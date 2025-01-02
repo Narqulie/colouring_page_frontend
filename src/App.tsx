@@ -104,6 +104,10 @@ export default function App() {
     }
   }
 
+  const handleReroll = (prompt: string) => {
+    setPrompt(prompt);  // Just set the prompt in the input field
+  }
+
   return (
     // Main container with 'app' class for styling
     <div className="app">
@@ -141,6 +145,7 @@ export default function App() {
         onDelete={async (image) => {
           await handleDelete(image as Image)
         }}
+        onReroll={handleReroll}
         isLoading={isLoading}
       />
     </div>

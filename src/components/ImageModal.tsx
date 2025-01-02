@@ -168,7 +168,7 @@ export function ImageModal({ image, onClose, onDelete, onReroll }: ImageModalPro
             >
               Print Image
             </button>
-            {onReroll && image.prompt && (
+            {onReroll && (
               <button
                 className="modal-button"
                 onClick={handleReroll}

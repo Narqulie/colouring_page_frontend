@@ -1,18 +1,28 @@
 /* ======================
-   0. TYPOGRAPHY
+   0. CSS VARIABLES & ROOT SETTINGS
    ====================== */
 :root {
+  /* Typography */
   --font-primary: futura, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
     Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   --font-size-small: 0.8rem;
   --font-size-base: 1rem;
   --font-size-large: 1.2rem;
   
-  /* Time-based gradient variables */
-  --gradient-primary: 255, 179, 64;    /* Default warm orange */
-  --gradient-secondary: 195, 226, 204;  /* Default soft green */
-  --gradient-opacity: 1;
-  --background-opacity: 0.5;
+  /* Colors & Gradients */
+  --gradient-start: #c490fb;  /* Light blue */
+  --gradient-end: #d99153;    /* Peach */
+}
+
+/* ======================
+   1. BASE STYLES & RESETS
+   ====================== */
+body,
+html {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  width: 100%;
 }
 
 body {
@@ -20,14 +30,45 @@ body {
   font-size: var(--font-size-base);
   line-height: 1.5;
   background: linear-gradient(
-    135deg, 
-    rgba(var(--gradient-primary), var(--gradient-opacity)) 0%, 
+    135deg,
+    rgba(var(--gradient-primary), var(--gradient-opacity)) 0%,
     rgba(var(--gradient-secondary), var(--gradient-opacity)) 70%
   );
+  background-attachment: fixed;
+  background-repeat: no-repeat;
 }
 
 /* ======================
-   0.5 HEADERS
+   2. LAYOUT & CONTAINERS
+   ====================== */
+#root {
+  max-width: 95%;
+  width: 100%;
+  margin: 2rem auto;
+  padding: 0;
+  text-align: center;
+}
+
+.app {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 1800px;
+  margin: 2rem auto;
+  padding: 2rem;
+  text-align: center;
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--gradient-start) 80%, transparent) 0%,
+    color-mix(in srgb, var(--gradient-end) 80%, transparent) 70%
+  );
+  color: #000000;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  min-height: calc(100vh - 4rem);
+}
+
+/* ======================
+   3. TYPOGRAPHY & TEXT ELEMENTS
    ====================== */
 .page-header {
   font-size: 2.5rem;
@@ -47,73 +88,14 @@ body {
   transform: translateX(-50%);
   width: 100%;
   height: 10px;
-  background: linear-gradient(
-    90deg, 
-    rgba(var(--gradient-primary), 0.6) 0%, 
-    rgba(var(--gradient-secondary), 0.6) 100%
-  );
+  background: linear-gradient(90deg, var(--gradient-start), var(--gradient-end));
   border-radius: 12px;
 }
 
 /* ======================
-   1. GLOBAL STYLES
+   4. FORM ELEMENTS
    ====================== */
-body,
-html {
-  margin: 0;
-  padding: 0;
-  min-height: 100vh;
-  width: 100%;
-}
-
-body {
-  background: linear-gradient(135deg, #ffb340 0%, #c3e2cc 70%);
-}
-
-/* ======================
-   2. ROOT & GENERIC COMPONENTS
-   ====================== */
-#root {
-  max-width: 95%;
-  width: 100%;
-  margin: 2rem auto;
-  padding: 0;
-  text-align: center;
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
-}
-
-/* ======================
-   3. MAIN APP CONTAINER
-   ====================== */
-.app {
-  box-sizing: border-box;
-  width: 100%;
-  max-width: 1800px;
-  margin: 2rem auto;
-  padding: 2rem;
-  text-align: center;
-  background: linear-gradient(
-    135deg, 
-    rgba(var(--gradient-primary), var(--gradient-opacity)) 0%, 
-    rgba(var(--gradient-secondary), var(--gradient-opacity)) 70%
-  );
-  color: #000000;
-  border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  min-height: calc(100vh - 4rem);
-}
-
-/* ======================
-   4. FORM COMPONENTS
-   ====================== */
-/* Main form container */
+/* Form Container */
 .prompt-form {
   display: flex;
   flex-direction: column;
@@ -122,7 +104,7 @@ body {
   margin: 2rem auto;
 }
 
-/* Form input field */
+/* Input Fields */
 .prompt-form input {
   padding: 0.5rem;
   font-size: 1rem;
@@ -132,16 +114,12 @@ body {
   color: black;
 }
 
-/* Form button styles */
+/* Buttons */
 .prompt-form .reactive-btn {
   font-family: inherit;
   font-size: 1rem;
-  background: linear-gradient(
-    90deg, 
-    rgba(var(--gradient-primary), 0.6) 0%, 
-    rgba(var(--gradient-secondary), 0.6) 100%
-  );
-  opacity: 0.6;
+  background: linear-gradient(90deg, var(--gradient-start), var(--gradient-end));
+  opacity: 0.8;
   color: rgb(0, 0, 0) !important;
   border: none;
   border-radius: 12px;
@@ -152,13 +130,7 @@ body {
 }
 
 .prompt-form .reactive-btn:hover:not(:disabled) {
-  background: linear-gradient(
-    90deg, 
-    rgba(var(--gradient-primary), 0.8) 0%, 
-    rgba(var(--gradient-secondary), 0.8) 100%
-  ) !important;
-  transform: translateY(-1px);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  opacity: 1;
 }
 
 .prompt-form .reactive-btn:disabled {
@@ -172,7 +144,7 @@ body {
 }
 
 /* ======================
-   5. ERROR HANDLING
+   5. FEEDBACK & NOTIFICATIONS
    ====================== */
 .error-message {
   max-width: 500px;
@@ -186,23 +158,16 @@ body {
 }
 
 @keyframes fadeInOut {
-  0% {
-    opacity: 0;
-  }
-  10% {
-    opacity: 1;
-  }
-  90% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
+  0% { opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { opacity: 0; }
 }
 
 /* ======================
-   6. IMAGE DISPLAY
+   6. IMAGE COMPONENTS
    ====================== */
+/* Single Image Display */
 .image-container {
   margin-top: 2rem;
 }
@@ -213,10 +178,7 @@ body {
   border-radius: 8px;
 }
 
-/* ======================
-   7. IMAGE GALLERY
-   ====================== */
-/* Gallery layout */
+/* Gallery Layout */
 .gallery {
   margin-top: 2rem;
 }
@@ -236,7 +198,7 @@ body {
   padding: 20px;
 }
 
-/* Gallery item styling */
+/* Gallery Items */
 .image-item {
   border-radius: 12px;
   overflow: hidden;
@@ -283,7 +245,7 @@ body {
   z-index: 0;
 }
 
-/* Image details */
+/* Image Details */
 .image-details {
   padding: 8px;
   min-height: 60px;
@@ -325,19 +287,8 @@ body {
 }
 
 /* ======================
-   8. EMPTY STATES
+   7. MODAL COMPONENTS
    ====================== */
-.no-images {
-  text-align: center;
-  color: #666;
-  font-size: 1.1rem;
-  margin: 40px 0;
-}
-
-/* ======================
-   9. IMAGE MODAL
-   ====================== */
-/* Modal overlay */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -351,7 +302,6 @@ body {
   z-index: 1000;
 }
 
-/* Modal container */
 .modal-content {
   background-color: white;
   padding: 20px;
@@ -364,14 +314,12 @@ body {
   align-items: center;
 }
 
-/* Modal image */
 .modal-image {
   max-width: 100%;
   max-height: 70vh;
   object-fit: contain;
 }
 
-/* Modal controls */
 .modal-details {
   margin-top: 15px;
 }
@@ -386,20 +334,26 @@ body {
 .modal-button {
   padding: 8px 16px;
   border: none;
-  border-radius: 4px;
-  background-color: #007bff;
-  color: white;
+  border-radius: 12px;
+  background: linear-gradient(90deg, var(--gradient-start), var(--gradient-end));
+  opacity: 0.8;
+  color: rgb(0, 0, 0);
   cursor: pointer;
-  transition: background-color 0.2s;
-  font-size: 14px;
+  transition: all 0.3s ease;
+  font-family: inherit;
+  font-size: var(--font-size-base);
 }
 
 .modal-button:hover {
-  background-color: #0056b3;
+  opacity: 1;
 }
 
-.modal-button:active {
-  background-color: #004085;
+.modal-button.modal-button-delete {
+  background: linear-gradient(90deg, #ff9999, #ff5555);
+}
+
+.modal-button.modal-button-delete:hover {
+  opacity: 1;
 }
 
 .modal-close {
@@ -424,4 +378,22 @@ body {
   color: #333;
   text-align: center;
   padding: 0 20px;
+}
+
+/* ======================
+   8. UTILITY CLASSES
+   ====================== */
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
+
+.no-images {
+  text-align: center;
+  color: #666;
+  font-size: 1.1rem;
+  margin: 40px 0;
 }

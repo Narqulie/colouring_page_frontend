@@ -13,10 +13,11 @@ export interface ImageItem {
 interface ImageGalleryProps {
   images: ImageItem[];
   onDelete?: (image: ImageItem) => Promise<void>;
+  onReroll?: (prompt: string) => void;
   isLoading?: boolean;
 }
 
-export const ImageGallery = ({ images, onDelete }: ImageGalleryProps) => {
+export const ImageGallery = ({ images, onDelete, onReroll }: ImageGalleryProps) => {
   const [selectedImage, setSelectedImage] = useState<ImageItem | null>(null)
 
   // Sort images by timestamp (newest first)
@@ -58,6 +59,7 @@ export const ImageGallery = ({ images, onDelete }: ImageGalleryProps) => {
         image={selectedImage} 
         onClose={() => setSelectedImage(null)}
         onDelete={onDelete}
+        onReroll={onReroll}
       />
     </>
   )
