@@ -36,7 +36,7 @@ export const PromptForm = ({ onSubmit, prompt, setPrompt }: PromptFormProps) => 
         type="text"
         value={prompt}
         onChange={(e) => setPrompt(e.target.value)}
-        placeholder="Describe what you want to color! (e.g., 'a friendly dragon')"
+        placeholder="Describe what you want to colour! (e.g., 'a friendly dragon')"
         disabled={buttonState === 'loading'}
       />
       <ReactiveButton
