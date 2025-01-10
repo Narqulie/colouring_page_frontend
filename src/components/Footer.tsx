@@ -28,7 +28,6 @@ export const Footer = () => {
             rel="noopener noreferrer"
             className="support-link"
           >
-            💶
             <span>Buy me a coffee</span>
           </a>
         </div>

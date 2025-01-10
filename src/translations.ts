@@ -13,7 +13,7 @@ export const translations = {
     errorDelete: "Failed to delete image",
     errorGenerate: "Failed to generate image",
     errorLoad: "Failed to load images from gallery",
-    supportProject: "Support the project",
+    supportProject: "💶 Support the project",
     madeWith: "Made with ❤️ by",
     copyright: "© 2024 Colouring Page Generator",
     version: "Version 1.0.0"
@@ -22,7 +22,7 @@ export const translations = {
     title: "Värityskuvageneraattori",
     generateButton: "Luo kuva",
     promptPlaceholder: "Kuvaile mitä haluat piirtää...",
-    noImages: "Ei vielä luotuja kuvia. Kokeile luoda yksi!",
+    noImages: "Ei luotuja kuvia. Kokeile luoda yksi!",
     saveImage: "Tallenna kuva",
     print: "Tulosta",
     reroll: "Luo uudelleen",
@@ -32,7 +32,7 @@ export const translations = {
     errorDelete: "Kuvan poistaminen epäonnistui",
     errorGenerate: "Kuvan luominen epäonnistui",
     errorLoad: "Kuvien lataaminen epäonnistui",
-    supportProject: "Tue projektia",
+    supportProject: "💶 Tue projektia",
     madeWith: "Made with ❤️ by",
     copyright: "© 2024 Colouring Page Generator",
     version: "Version 1.0.0"
