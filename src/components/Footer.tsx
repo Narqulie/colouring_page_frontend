@@ -29,7 +29,7 @@ export const Footer = () => {
             className="support-link"
           >
             <img
-              src="https://www.paypalobjects.com/en_GB/i/btn/btn_donate_SM.gif"
+              src="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>💶</text></svg>"
               alt="Support this project"
             />
             <span>Buy me a coffee</span>
