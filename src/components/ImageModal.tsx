@@ -1,10 +1,12 @@
 import { ImageItem } from './imageGallery'
+import { translations } from '../translations'
 
 interface ImageModalProps {
   image: ImageItem | null
   onClose: () => void
-  onDelete?: (image: ImageItem) => void
+  onDelete?: (image: ImageItem) => Promise<void>
   onReroll?: (prompt: string) => void
+  language?: 'en' | 'fi'
 }
 
 export function ImageModal({
@@ -12,6 +14,7 @@ export function ImageModal({
   onClose,
   onDelete,
   onReroll,
+  language = 'en'
 }: ImageModalProps) {
   if (!image) return null
 
@@ -133,11 +136,10 @@ export function ImageModal({
   const handleDelete = async () => {
     if (!image || !onDelete) return
 
-    // Show confirmation dialog
-    if (window.confirm('Are you sure you want to delete this image?')) {
+    if (window.confirm(translations[language].confirmDelete)) {
       try {
         await onDelete(image)
-        onClose() // Close modal after successful deletion
+        onClose()
       } catch (error) {
         console.error('Error deleting image:', error)
       }
@@ -168,14 +170,14 @@ export function ImageModal({
           <p className="modal-prompt">{image.prompt}</p>
           <div className="modal-actions">
             <button className="modal-button" onClick={handleSave} type="button">
-              Save Image
+              {translations[language].saveImage}
             </button>
             <button
               className="modal-button"
               onClick={handlePrint}
               type="button"
             >
-              Print
+              {translations[language].print}
             </button>
             {onReroll && (
               <button
@@ -183,7 +185,7 @@ export function ImageModal({
                 onClick={handleReroll}
                 type="button"
               >
-                Reuse prompt
+                {translations[language].reroll}
               </button>
             )}
             {onDelete && (
@@ -192,7 +194,7 @@ export function ImageModal({
                 onClick={handleDelete}
                 type="button"
               >
-                Delete
+                {translations[language].delete}
               </button>
             )}
           </div>

@@ -1,6 +1,16 @@
 import { useState } from 'react'
 import { ImageModal } from './ImageModal'
 
+// Add translations
+const translations = {
+  en: {
+    noImages: "No images generated yet. Try creating one!",
+  },
+  fi: {
+    noImages: "Ei vielä luotuja kuvia. Kokeile luoda yksi!",
+  }
+} as const;
+
 export interface ImageItem {
   id: string;
   url: string;
@@ -15,9 +25,15 @@ interface ImageGalleryProps {
   onDelete?: (image: ImageItem) => Promise<void>;
   onReroll?: (prompt: string) => void;
   isLoading?: boolean;
+  language?: 'en' | 'fi';  // Add language prop
 }
 
-export const ImageGallery = ({ images, onDelete, onReroll }: ImageGalleryProps) => {
+export const ImageGallery = ({ 
+  images, 
+  onDelete, 
+  onReroll, 
+  language = 'en' // Default to English
+}: ImageGalleryProps) => {
   const [selectedImage, setSelectedImage] = useState<ImageItem | null>(null)
 
   // Sort images by timestamp (newest first)
@@ -34,7 +50,7 @@ export const ImageGallery = ({ images, onDelete, onReroll }: ImageGalleryProps) 
     <>
       <div className="gallery-container">
         {images.length === 0 ? (
-          <p className="no-images">No images generated yet. Try creating one!</p>
+          <p className="no-images">{translations[language].noImages}</p>
         ) : (
           <div className="image-grid">
             {sortedImages.map((image) => (
@@ -60,6 +76,7 @@ export const ImageGallery = ({ images, onDelete, onReroll }: ImageGalleryProps) 
         onClose={() => setSelectedImage(null)}
         onDelete={onDelete}
         onReroll={onReroll}
+        language={language}  // Pass language to modal
       />
     </>
   )

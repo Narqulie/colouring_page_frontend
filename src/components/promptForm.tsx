@@ -1,13 +1,15 @@
 import { useState } from 'react'
 import ReactiveButton from 'reactive-button'
+import { translations } from '../translations'
 
 interface PromptFormProps {
   onSubmit: (prompt: string) => Promise<void>
   prompt: string
   setPrompt: (prompt: string) => void
+  language: 'en' | 'fi'
 }
 
-export const PromptForm = ({ onSubmit, prompt, setPrompt }: PromptFormProps) => {
+export const PromptForm = ({ onSubmit, prompt, setPrompt, language }: PromptFormProps) => {
   const [buttonState, setButtonState] = useState('idle')
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -36,12 +38,12 @@ export const PromptForm = ({ onSubmit, prompt, setPrompt }: PromptFormProps) => 
         type="text"
         value={prompt}
         onChange={(e) => setPrompt(e.target.value)}
-        placeholder="Describe what you want to colour! (e.g., 'a friendly dragon')"
+        placeholder={translations[language].promptPlaceholder}
         disabled={buttonState === 'loading'}
       />
       <ReactiveButton
         buttonState={buttonState}
-        idleText="Create Coloring Page"
+        idleText={translations[language].generateButton}
         loadingText="Creating..."
         successText="Created!"
         errorText="Error!"

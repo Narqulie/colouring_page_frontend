@@ -3,7 +3,9 @@ import { useState, useEffect } from 'react' // Allows us to use state in our com
 import { PromptForm } from './components/promptForm' // Import our custom form component
 import { ImageGallery } from './components/imageGallery' // Import our custom image gallery component
 import './App.css' // Import styles for this component
-import { Footer } from './components/Footer'
+import { LanguageSwitcher } from './components/LanguageSwitcher'
+import { translations } from './translations'
+import packageJson from '../package.json'
 
 // Define TypeScript interfaces for our data structures
 interface Image {
@@ -31,6 +33,8 @@ export default function App() {
   // Add prompt state
   const [prompt, setPrompt] = useState('')
 
+  const [language, setLanguage] = useState<'en' | 'fi'>('en')
+
   // Fetch images when component mounts
   useEffect(() => {
     fetchImages()
@@ -57,6 +61,14 @@ export default function App() {
     try {
       const formData = new FormData()
       formData.append('prompt', prompt)
+      formData.append('language', language)
+
+      // Log the data being sent
+      console.log('Sending generation request:', {
+        prompt,
+        language,
+        url: `${import.meta.env.VITE_API_URL}/api/generate`
+      })
 
       const response = await fetch(`${import.meta.env.VITE_API_URL}/api/generate`, {
         method: 'POST',
@@ -67,15 +79,17 @@ export default function App() {
         if (response.status === 429) {
           throw new Error('Too many requests. Please wait a moment.')
         }
-        throw new Error('Failed to generate image')
+        throw new Error(translations[language].errorGenerate)
       }
 
-      await response.json()  // Just consume the response without storing it
-      await fetchImages()    // Fetch fresh images
-      setPrompt('')         // Clear the prompt
+      const responseData = await response.json()
+      console.log('Generation response:', responseData)  // Log the response
+      
+      await fetchImages()
+      setPrompt('')
       
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred';
+      const errorMessage = err instanceof Error ? err.message : translations[language].errorGenerate;
       setError(errorMessage);
       console.error('Error generating image:', err);
       
@@ -99,7 +113,7 @@ export default function App() {
       await fetchImages()
       
     } catch (err) {
-      setError('Failed to delete image')
+      setError(translations[language].errorDelete)
       console.error('Error deleting image:', err)
       throw err
     }
@@ -113,13 +127,14 @@ export default function App() {
     // Main container with 'app' class for styling
     <div className="app">
       {/* Page title */}
-      <h1 className="page-header">Colouring Page Generator</h1>
+      <h1 className="page-header">{translations[language].title}</h1>
       
       {/* Custom form component that takes our handler and loading state */}
       <PromptForm 
         onSubmit={handlePromptSubmit} 
         prompt={prompt}
         setPrompt={setPrompt}
+        language={language}
       />
       
       {/* Conditional rendering: Only show error div if there's an error */}
@@ -148,9 +163,37 @@ export default function App() {
         }}
         onReroll={handleReroll}
         isLoading={isLoading}
+        language={language}
       />
       
-      <Footer />
+      <div className="app-footer">
+        <div className="footer-content">
+          <div className="footer-section">
+            <p className="credits">{translations[language].copyright}</p>
+            <p className="version">{translations[language].version.replace('1.0.0', packageJson.version)}</p>
+          </div>
+          <div className="footer-section">
+            <LanguageSwitcher 
+              currentLanguage={language}
+              onLanguageChange={setLanguage}
+            />
+          </div>
+          <div className="footer-section">
+            <p className="credits">
+              {translations[language].madeWith} <a href="https://github.com/Narqulie" className="credits-link">Narqulie</a>
+            </p>
+            <a 
+              href="https://paypal.me/jheaminoff" 
+              className="support-link"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img src="/paypal.svg" alt="PayPal" className="support-icon" />
+              {translations[language].supportProject}
+            </a>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }
