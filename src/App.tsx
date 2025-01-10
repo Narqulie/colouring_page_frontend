@@ -188,7 +188,6 @@ export default function App() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              <img src="/paypal.svg" alt="PayPal" className="support-icon" />
               {translations[language].supportProject}
             </a>
           </div>
