@@ -154,7 +154,16 @@ export function ImageModal({
       aria-modal="true"
       aria-labelledby="modal-title"
     >
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+      <div 
+        className="modal-content" 
+        onClick={(e) => e.stopPropagation()}
+        style={{
+          maxHeight: '90vh',  // Limit height to 90% of viewport
+          overflowY: 'auto',  // Enable vertical scrolling
+          display: 'flex',
+          flexDirection: 'column'
+        }}
+      >
         <button
           className="modal-close"
           onClick={onClose}
@@ -162,8 +171,13 @@ export function ImageModal({
         >
           ×
         </button>
-        <img src={image.url} alt={image.prompt} className="modal-image" />
-        <div className="modal-details">
+        <img 
+          src={image.url} 
+          alt={image.prompt} 
+          className="modal-image" 
+          style={{ maxHeight: '70vh', objectFit: 'contain' }}  // Limit image height
+        />
+        <div className="modal-details" style={{ flexShrink: 0 }}>  {/* Prevent shrinking */}
           {image.timestamp && (
             <p className="modal-timestamp">{image.timestamp}</p>
           )}
