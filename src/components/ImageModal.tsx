@@ -64,6 +64,11 @@ export function ImageModal({
     printFrame.style.height = '0'
     printFrame.style.border = 'none'
 
+    // Ensure full URL for the image
+    const fullUrl = image.url.startsWith('http') 
+      ? image.url 
+      : `${import.meta.env.VITE_API_URL}${image.url}`
+
     // Append iframe to document
     document.body.appendChild(printFrame)
 
@@ -82,13 +87,15 @@ export function ImageModal({
               body { 
                 margin: 0; 
                 padding: 0; 
-                position: relative;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                min-height: 100vh;
               }
               img { 
-                max-width: 100%; 
-                height: auto; 
-                display: block; 
-                margin: 0 auto;
+                max-width: 100%;
+                max-height: 100vh;
+                object-fit: contain;
               }
               .watermark {
                 position: fixed;
@@ -102,18 +109,8 @@ export function ImageModal({
           </style>
         </head>
         <body>
-          <img src="${image.url}" alt="${image.prompt}" />
+          <img src="${fullUrl}" alt="${image.prompt}" onload="window.print();" />
           <div class="watermark">${image.prompt} - ColouringPageGenerator</div>
-          <script>
-            window.onload = function() {
-              setTimeout(() => {
-                window.print();
-                setTimeout(() => {
-                  document.body.parentNode.removeChild(document.body);
-                }, 100);
-              }, 500);
-            };
-          </script>
         </body>
       </html>
     `)
