@@ -55,35 +55,27 @@ export function ImageModal({
   }
 
   const handlePrint = () => {
-    // Create a hidden iframe
-    const printFrame = document.createElement('iframe')
-    printFrame.style.position = 'fixed'
-    printFrame.style.right = '0'
-    printFrame.style.bottom = '0'
-    printFrame.style.width = '0'
-    printFrame.style.height = '0'
-    printFrame.style.border = 'none'
+    // Create a new window for printing
+    const printWindow = window.open('', '_blank');
+    if (!printWindow) return;
 
     // Ensure full URL for the image
     const fullUrl = image.url.startsWith('http') 
       ? image.url 
-      : `${import.meta.env.VITE_API_URL}${image.url}`
-
-    // Append iframe to document
-    document.body.appendChild(printFrame)
-
-    // Ensure we have access to the iframe's document
-    const frameDoc = printFrame.contentWindow?.document
-    if (!frameDoc) return
+      : `${import.meta.env.VITE_API_URL}${image.url}`;
 
     // Write the print content
-    frameDoc.open()
-    frameDoc.write(`
+    printWindow.document.write(`
       <!DOCTYPE html>
       <html>
         <head>
+          <title>${image.prompt}</title>
           <style>
             @media print {
+              @page {
+                size: auto;
+                margin: 0mm;
+              }
               body { 
                 margin: 0; 
                 padding: 0; 
@@ -93,9 +85,11 @@ export function ImageModal({
                 min-height: 100vh;
               }
               img { 
-                max-width: 100%;
+                width: 100%;
+                height: auto;
                 max-height: 100vh;
                 object-fit: contain;
+                page-break-inside: avoid;
               }
               .watermark {
                 position: fixed;
@@ -109,19 +103,16 @@ export function ImageModal({
           </style>
         </head>
         <body>
-          <img src="${fullUrl}" alt="${image.prompt}" onload="window.print();" />
+          <img 
+            src="${fullUrl}" 
+            alt="${image.prompt}"
+            onload="setTimeout(function() { window.print(); window.close(); }, 250);"
+          />
           <div class="watermark">${image.prompt} - ColouringPageGenerator</div>
         </body>
       </html>
-    `)
-    frameDoc.close()
-
-    // Remove the iframe after printing
-    printFrame.onload = () => {
-      setTimeout(() => {
-        document.body.removeChild(printFrame)
-      }, 2000)
-    }
+    `);
+    printWindow.document.close();
   }
 
   const handleReroll = () => {
