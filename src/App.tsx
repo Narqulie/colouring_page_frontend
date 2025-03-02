@@ -6,6 +6,7 @@ import './App.css' // Import styles for this component
 import { LanguageSwitcher } from './components/LanguageSwitcher'
 import { translations } from './translations'
 import packageJson from '../package.json'
+import { useTimeBasedGradient } from './components/TimeBasedGradient'
 
 // Define TypeScript interfaces for our data structures
 interface Image {
@@ -34,6 +35,8 @@ export default function App() {
   const [prompt, setPrompt] = useState('')
 
   const [language, setLanguage] = useState<'en' | 'fi'>('en')
+
+  const gradientStyle = useTimeBasedGradient()
 
   // Fetch images when component mounts
   useEffect(() => {
@@ -125,7 +128,7 @@ export default function App() {
 
   return (
     // Main container with 'app' class for styling
-    <div className="app">
+    <div className="app" style={{ background: gradientStyle }}>
       {/* Page title */}
       <h1 className="page-header">{translations[language].title}</h1>
       

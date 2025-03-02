@@ -55,16 +55,13 @@ export function ImageModal({
   }
 
   const handlePrint = () => {
-    // Create a new window for printing
     const printWindow = window.open('', '_blank');
     if (!printWindow) return;
 
-    // Ensure full URL for the image
     const fullUrl = image.url.startsWith('http') 
       ? image.url 
       : `${import.meta.env.VITE_API_URL}${image.url}`;
 
-    // Write the print content
     printWindow.document.write(`
       <!DOCTYPE html>
       <html>
@@ -74,46 +71,67 @@ export function ImageModal({
             @media print {
               @page {
                 size: auto;
-                margin: 0mm;
+                margin: 1cm;
               }
-              body { 
-                margin: 0; 
-                padding: 0; 
+              
+              html, body {
+                margin: 0;
+                padding: 0;
+                height: 100%;
+              }
+              
+              body {
                 display: flex;
-                justify-content: center;
+                flex-direction: column;
                 align-items: center;
-                min-height: 100vh;
+                justify-content: center;
               }
-              img { 
+              
+              .print-container {
                 width: 100%;
-                height: auto;
-                max-height: 100vh;
-                object-fit: contain;
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
                 page-break-inside: avoid;
               }
+              
+              img {
+                max-width: 100%;
+                max-height: calc(100vh - 4cm);
+                object-fit: contain;
+                margin: auto;
+              }
+              
               .watermark {
-                position: fixed;
-                bottom: 10px;
-                right: 10px;
-                font-size: 12px;
-                color: #999;
-                opacity: 0.7;
+                margin-top: 0.5cm;
+                font-family: Arial, sans-serif;
+                font-size: 10pt;
+                color: #666;
+                text-align: center;
               }
             }
           </style>
         </head>
         <body>
-          <img 
-            src="${fullUrl}" 
-            alt="${image.prompt}"
-            onload="setTimeout(function() { window.print(); window.close(); }, 250);"
-          />
-          <div class="watermark">${image.prompt} - ColouringPageGenerator</div>
+          <div class="print-container">
+            <img 
+              src="${fullUrl}" 
+              alt="${image.prompt}"
+              onload="setTimeout(function() { window.print(); window.close(); }, 500);"
+            />
+            <div class="watermark">
+              ${image.prompt}
+              <br>
+              Generated with ColouringPageGenerator
+            </div>
+          </div>
         </body>
       </html>
     `);
     printWindow.document.close();
-  }
+  };
 
   const handleReroll = () => {
     if (!image?.prompt || !onReroll) return

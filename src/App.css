@@ -9,9 +9,21 @@
   --font-size-base: 1rem;
   --font-size-large: 1.2rem;
   
-  /* Colors & Gradients */
-  --gradient-start: #c490fb;  /* Light blue */
-  --gradient-end: #d99153;    /* Peach */
+  /* Colors & Gradients - Morning (6-12) */
+  --gradient-morning-start: #ffd4a3;  /* Light peachy */
+  --gradient-morning-end: #ffb6c1;    /* Light pink */
+  
+  /* Colors & Gradients - Afternoon (12-18) */
+  --gradient-afternoon-start: #c490fb;  /* Light purple */
+  --gradient-afternoon-end: #d99153;    /* Peach */
+  
+  /* Colors & Gradients - Evening (18-24) */
+  --gradient-evening-start: #471e6e;  /* Deep purple */
+  --gradient-evening-end: #b85151;    /* Coral */
+  
+  /* Colors & Gradients - Night (0-6) */
+  --gradient-night-start: #483d8b;  /* Dark slate blue */
+  --gradient-night-end: #4b0082;    /* Indigo */
 }
 
 /* ======================
