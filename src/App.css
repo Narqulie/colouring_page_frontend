@@ -146,7 +146,7 @@ body {
 .prompt-form .reactive-btn {
   font-family: inherit;
   font-size: 1rem;
-  background: linear-gradient(90deg, var(--gradient-start), var(--gradient-end));
+  background: linear-gradient(90deg, var(--gradient-morning-start), var(--gradient-morning-end));
   opacity: 0.8;
   color: rgb(0, 0, 0) !important;
   border: none;

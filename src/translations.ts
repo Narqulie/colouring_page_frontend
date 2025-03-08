@@ -15,7 +15,7 @@ export const translations = {
     errorLoad: "Failed to load images from gallery",
     supportProject: "💶 Support the project",
     madeWith: "Made with ❤️ by",
-    copyright: "© 2024 Colouring Page Generator",
+    copyright: "Colouring Page Generator",
     version: "Version 1.0.0"
   },
   fi: {
@@ -34,7 +34,7 @@ export const translations = {
     errorLoad: "Kuvien lataaminen epäonnistui",
     supportProject: "💶 Tue projektia",
     madeWith: "Made with ❤️ by",
-    copyright: "© 2024 Colouring Page Generator",
+    copyright: "Colouring Page Generator",
     version: "Version 1.0.0"
   }
 } as const; 
