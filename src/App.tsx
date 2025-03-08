@@ -7,6 +7,7 @@ import { LanguageSwitcher } from './components/LanguageSwitcher'
 import { translations } from './translations'
 import packageJson from '../package.json'
 import { useTimeBasedGradient } from './components/TimeBasedGradient'
+import { useHealthCheck } from './hooks/useHealthCheck'
 
 // Define TypeScript interfaces for our data structures
 interface Image {
@@ -37,6 +38,8 @@ export default function App() {
   const [language, setLanguage] = useState<'en' | 'fi'>('en')
 
   const gradientStyle = useTimeBasedGradient()
+
+  const { health, error: healthError } = useHealthCheck()
 
   // Fetch images when component mounts
   useEffect(() => {
@@ -173,7 +176,12 @@ export default function App() {
         <div className="footer-content">
           <div className="footer-section">
             <p className="credits">{translations[language].copyright}</p>
-            <p className="version">{translations[language].version.replace('1.0.0', packageJson.version)}</p>
+            <p className="version">
+              {translations[language].version.replace('1.0.0', packageJson.version)}
+              {health && ` | API v${health.version}`}
+              {health && <span className="api-status" title="API Status">●</span>}
+              {healthError && <span className="api-status error" title="API Unavailable">●</span>}
+            </p>
           </div>
           <div className="footer-section">
             <LanguageSwitcher 
