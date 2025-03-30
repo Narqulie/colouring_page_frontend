@@ -12,7 +12,7 @@ export const useHealthCheck = () => {
   useEffect(() => {
     const checkHealth = async () => {
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/health`);
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/`);
         if (!response.ok) {
           throw new Error('Health check failed');
         }

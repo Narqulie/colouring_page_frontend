@@ -30,11 +30,11 @@ export function ImageModal({
         .replace(/[^a-z0-9]/gi, '_')
         .toLowerCase()
         .slice(0, 50)
-      const fileName = `${sanitizedPrompt}.png`
+      const fileName = `${sanitizedPrompt}.webp`
 
       const fullUrl = image.url.startsWith('http')
         ? image.url
-        : `http://localhost:8000${image.url}`
+        : `${import.meta.env.VITE_API_URL}${image.url}`
 
       const link = document.createElement('a')
       link.href = fullUrl

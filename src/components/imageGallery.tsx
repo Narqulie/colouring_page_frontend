@@ -4,10 +4,10 @@ import { ImageModal } from './ImageModal'
 // Add translations
 const translations = {
   en: {
-    noImages: "No images generated yet. Try creating one!",
+    noImages: "No images generated yet. Try creating one by entering a prompt above!",
   },
   fi: {
-    noImages: "Ei vielä luotuja kuvia. Kokeile luoda yksi!",
+    noImages: "Ei vielä luotuja kuvia. Kokeile luoda yksi kirjoittamalla kuvaus ylös!",
   }
 } as const;
 
@@ -55,13 +55,20 @@ export const ImageGallery = ({
           <div className="image-grid">
             {sortedImages.map((image) => (
               <div
-                key={image.id}
+                key={image.filename}
                 className={`image-item ${
                   selectedImage === image ? 'selected' : ''
                 }`}
                 onClick={() => handleImageClick(image)}
               >
-                <img src={image.url} alt={image.prompt} />
+                <picture>
+                  <source srcSet={image.url} type="image/webp" />
+                  <img 
+                    src={image.url} 
+                    alt={image.prompt} 
+                    loading="lazy"
+                  />
+                </picture>
                 <div className="image-details">
                   <p className="image-prompt">{image.prompt}</p>
                   {image.timestamp && <p className="image-timestamp">{image.timestamp}</p>}

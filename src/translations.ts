@@ -16,7 +16,25 @@ export const translations = {
     supportProject: "💶 Support the project",
     madeWith: "Made with ❤️ by",
     copyright: "Colouring Page Generator",
-    version: "Version 1.0.0"
+    version: "Version 1.0.0",
+    complexityLabel: "Complexity",
+    themeLabel: "Theme",
+    complexityOptions: {
+      simple: "Simple",
+      medium: "Medium",
+      detailed: "Detailed"
+    },
+    themeOptions: {
+      none: "None (Auto-select)",
+      animals: "Animals",
+      nature: "Nature",
+      fantasy: "Fantasy",
+      space: "Space",
+      vehicles: "Vehicles",
+      adventure: "Adventure",
+      everyday: "Everyday Life",
+      education: "Education & Learning"
+    }
   },
   fi: {
     title: "Värityskuvageneraattori",
@@ -35,6 +53,24 @@ export const translations = {
     supportProject: "💶 Tue projektia",
     madeWith: "Made with ❤️ by",
     copyright: "Colouring Page Generator",
-    version: "Version 1.0.0"
+    version: "Version 1.0.0",
+    complexityLabel: "Monimutkaisuus",
+    themeLabel: "Teema",
+    complexityOptions: {
+      simple: "Yksinkertainen",
+      medium: "Keskitaso",
+      detailed: "Yksityiskohtainen"
+    },
+    themeOptions: {
+      none: "Ei valintaa (Automaattinen)",
+      animals: "Eläimet",
+      nature: "Luonto",
+      fantasy: "Fantasia",
+      space: "Avaruus",
+      vehicles: "Ajoneuvot",
+      adventure: "Seikkailu",
+      everyday: "Arki",
+      education: "Opetus & Oppiminen"
+    }
   }
 } as const; 

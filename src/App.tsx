@@ -50,17 +50,21 @@ export default function App() {
   const fetchImages = async () => {
     try {
       const API_URL = import.meta.env.VITE_API_URL;
-      const response = await fetch(`${API_URL}/api/images`)
+      const response = await fetch(`${API_URL}/images`)
+      if (!response.ok) {
+        throw new Error('Failed to fetch images');
+      }
       const data = await response.json()
-      setImages(data.images)
+      setImages(data.images || [])
     } catch (err) {
       setError('Failed to load images from gallery')
       console.error('Error fetching images:', err)
+      setImages([]) // Set empty array on error
     }
   }
 
   // Updated handler for prompt submission
-  const handlePromptSubmit = async (prompt: string) => {
+  const handlePromptSubmit = async (prompt: string, complexity: string, theme: string) => {
     setIsLoading(true)
     setError(null)
     
@@ -68,15 +72,19 @@ export default function App() {
       const formData = new FormData()
       formData.append('prompt', prompt)
       formData.append('language', language)
+      formData.append('complexity', complexity)
+      formData.append('theme', theme)
 
       // Log the data being sent
       console.log('Sending generation request:', {
         prompt,
         language,
-        url: `${import.meta.env.VITE_API_URL}/api/generate`
+        complexity,
+        theme,
+        url: `${import.meta.env.VITE_API_URL}/generate`
       })
 
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/generate`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/generate`, {
         method: 'POST',
         body: formData,
       })
@@ -108,7 +116,7 @@ export default function App() {
 
   const handleDelete = async (image: Image) => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/images/${image.filename}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/images/${image.filename}`, {
         method: 'DELETE',
       })
       
@@ -149,20 +157,20 @@ export default function App() {
 
       
       <ImageGallery 
-        images={images.map(img => ({
+        images={(images || []).map(img => ({
           id: img.filename,
-          url: `${import.meta.env.VITE_API_URL}${img.url}`,
+          url: img.url ? (img.url.startsWith('http') ? img.url : `${import.meta.env.VITE_API_URL}${img.url}`) : '',
           prompt: img.prompt || '',
           filename: img.filename,
           date: img.date,
-          timestamp: new Date(img.date).toLocaleString('en-GB', {
+          timestamp: img.date ? new Date(img.date).toLocaleString('en-GB', {
             day: '2-digit',
             month: '2-digit', 
             year: 'numeric',
             hour: 'numeric',
             minute: '2-digit',
             hour12: true
-          })
+          }) : ''
         }))} 
         onDelete={async (image) => {
           await handleDelete(image as Image)
