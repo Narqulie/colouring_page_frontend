@@ -50,57 +50,53 @@ export default function App() {
   const fetchImages = async () => {
     try {
       const API_URL = import.meta.env.VITE_API_URL;
-      const response = await fetch(`${API_URL}/images`)
+      console.log('Fetching images from:', `${API_URL}/images`);
+      const response = await fetch(`${API_URL}/images`);
       if (!response.ok) {
-        throw new Error('Failed to fetch images');
+        throw new Error(`Failed to fetch images: ${response.status} ${response.statusText}`);
       }
-      const data = await response.json()
-      setImages(data.images || [])
+      const data = await response.json();
+      setImages(data.images || []);
     } catch (err) {
-      setError('Failed to load images from gallery')
-      console.error('Error fetching images:', err)
-      setImages([]) // Set empty array on error
+      const errorMessage = err instanceof Error ? err.message : 'Failed to load images from gallery';
+      setError(errorMessage);
+      console.error('Error fetching images:', err);
+      setImages([]); // Set empty array on error
     }
   }
 
   // Updated handler for prompt submission
   const handlePromptSubmit = async (prompt: string, complexity: string, theme: string) => {
-    setIsLoading(true)
-    setError(null)
+    setIsLoading(true);
+    setError(null);
     
     try {
-      const formData = new FormData()
-      formData.append('prompt', prompt)
-      formData.append('language', language)
-      formData.append('complexity', complexity)
-      formData.append('theme', theme)
+      const API_URL = import.meta.env.VITE_API_URL;
+      const formData = new FormData();
+      formData.append('prompt', prompt);
+      formData.append('language', language);
+      formData.append('complexity', complexity);
+      formData.append('theme', theme);
 
-      // Log the data being sent
-      console.log('Sending generation request:', {
-        prompt,
-        language,
-        complexity,
-        theme,
-        url: `${import.meta.env.VITE_API_URL}/generate`
-      })
+      console.log('Sending generation request to:', `${API_URL}/generate`);
 
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/generate`, {
+      const response = await fetch(`${API_URL}/generate`, {
         method: 'POST',
         body: formData,
-      })
+      });
 
       if (!response.ok) {
         if (response.status === 429) {
-          throw new Error('Too many requests. Please wait a moment.')
+          throw new Error('Too many requests. Please wait a moment.');
         }
-        throw new Error(translations[language].errorGenerate)
+        throw new Error(`Generation failed: ${response.status} ${response.statusText}`);
       }
 
-      const responseData = await response.json()
-      console.log('Generation response:', responseData)  // Log the response
+      const responseData = await response.json();
+      console.log('Generation response:', responseData);
       
-      await fetchImages()
-      setPrompt('')
+      await fetchImages();
+      setPrompt('');
       
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : translations[language].errorGenerate;
@@ -110,7 +106,7 @@ export default function App() {
       setTimeout(() => setError(null), 10000);
       throw err;
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   }
 

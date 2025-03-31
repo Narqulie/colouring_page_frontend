@@ -12,21 +12,27 @@ export const useHealthCheck = () => {
   useEffect(() => {
     const checkHealth = async () => {
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/`);
+        const API_URL = import.meta.env.VITE_API_URL;
+        console.log('Checking health at:', `${API_URL}/health`);
+        const response = await fetch(`${API_URL}/health`);
         if (!response.ok) {
-          throw new Error('Health check failed');
+          throw new Error(`Health check failed with status: ${response.status}`);
         }
         const data = await response.json();
         setHealth(data);
+        setError(null);
       } catch (err) {
-        setError('API unavailable');
+        const errorMessage = err instanceof Error ? err.message : 'API unavailable';
+        setError(errorMessage);
         console.error('Health check error:', err);
       }
     };
 
+    // Initial check
     checkHealth();
-    // Check health every 5 minutes
-    const interval = setInterval(checkHealth, 300000);
+    
+    // Check health every 30 seconds
+    const interval = setInterval(checkHealth, 30000);
 
     return () => clearInterval(interval);
   }, []);
